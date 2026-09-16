@@ -1,4 +1,4 @@
-# adlc: local-only artefacts (guard hooks also block committing these)
+# slipway: local-only artefacts (guard hooks also block committing these)
 *.tfstate
 *.tfstate.*
 *.tfvars

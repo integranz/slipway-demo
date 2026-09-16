@@ -14,7 +14,7 @@ app.MapGet("/", () => Results.Ok(new { service = "adlc-demo-api", version }));
 var health = () => Results.Ok(new HealthResponse("ok", version, startedAt));
 app.MapGet("/health", health);
 app.MapGet("/api/health", health);
-app.MapGet("/api/greeting", (string? name) => Results.Ok(new { message = $"Hello, {(string.IsNullOrWhiteSpace(name) ? "adlc" : name.Trim())}!", version }));
+app.MapGet("/api/greeting", (string? name) => Results.Ok(new { message = $"Hello, {(string.IsNullOrWhiteSpace(name) ? "slipway" : name.Trim())}!", version }));
 
 app.Run();
 

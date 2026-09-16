@@ -15,7 +15,7 @@ export default function App() {
 
   return (
     <main style={{ fontFamily: "system-ui, sans-serif", maxWidth: 640, margin: "4rem auto", padding: "0 1rem" }}>
-      <h1>adlc demo</h1>
+      <h1>slipway demo</h1>
       <p>Frontend version <code>{webVersion}</code></p>
       {health && (
         <p>
