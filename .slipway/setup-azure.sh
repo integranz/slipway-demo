@@ -19,7 +19,7 @@ for a in "$@"; do case "$a" in --apply) APPLY=true;; --set-github-secrets) SET_S
 PROJECT="adlc-demo"
 LOCATION="westeurope"
 RG="rg-adlc-demo-dev"
-STATE_RG="rg-slipway-tfstate"
+STATE_RG="rg-adlc-tfstate"
 STATE_SA="stadlctfstate"
 STATE_CONTAINER="tfstate"
 GH_OWNER="integranz"; GH_REPO="slipway-demo"; GH_BRANCH="main"; GH_ENV="dev"

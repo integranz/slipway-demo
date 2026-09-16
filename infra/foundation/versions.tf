@@ -16,7 +16,7 @@ terraform {
   # State lives in the storage account created by .slipway/setup-azure.sh (shared-key access disabled):
   # authentication is Entra ID only. Locally: az login. In CI: OIDC (ARM_USE_OIDC=true).
   backend "azurerm" {
-    resource_group_name  = "rg-slipway-tfstate"
+    resource_group_name  = "rg-adlc-tfstate"
     storage_account_name = "stadlctfstate"
     container_name       = "tfstate"
     key                  = "adlc-demo/foundation/dev.tfstate"

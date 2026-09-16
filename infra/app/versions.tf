@@ -10,7 +10,7 @@ terraform {
   }
 
   backend "azurerm" {
-    resource_group_name  = "rg-slipway-tfstate"
+    resource_group_name  = "rg-adlc-tfstate"
     storage_account_name = "stadlctfstate"
     container_name       = "tfstate"
     key                  = "adlc-demo/app/dev.tfstate"

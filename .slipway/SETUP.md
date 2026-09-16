@@ -51,8 +51,8 @@ echo "AZURE_CLIENT_ID=$APP_ID  AZURE_TENANT_ID=$(az account show --query tenantI
 
 ## 4. Terraform state storage (once; Entra ID auth only, no storage keys)
 ```
-az group create -n rg-slipway-tfstate -l westeurope
-az storage account create -n stadlctfstate -g rg-slipway-tfstate -l westeurope \
+az group create -n rg-adlc-tfstate -l westeurope
+az storage account create -n stadlctfstate -g rg-adlc-tfstate -l westeurope \
   --sku Standard_LRS --kind StorageV2 --min-tls-version TLS1_2 --allow-blob-public-access false --allow-shared-key-access false
 az storage container create -n tfstate --account-name stadlctfstate --auth-mode login
 ```
@@ -65,13 +65,13 @@ SUB=$(az account show --query id -o tsv); SP=$(az ad sp show --id "$APP_ID" --qu
 az role assignment create --assignee-object-id "$SP" --assignee-principal-type ServicePrincipal --role Contributor \
   --scope /subscriptions/$SUB/resourceGroups/rg-adlc-demo-dev
 az role assignment create --assignee-object-id "$SP" --assignee-principal-type ServicePrincipal --role "Storage Blob Data Contributor" \
-  --scope /subscriptions/$SUB/resourceGroups/rg-slipway-tfstate/providers/Microsoft.Storage/storageAccounts/stadlctfstate/blobServices/default/containers/tfstate
+  --scope /subscriptions/$SUB/resourceGroups/rg-adlc-tfstate/providers/Microsoft.Storage/storageAccounts/stadlctfstate/blobServices/default/containers/tfstate
 # AcrPush on acradlcdemo is assigned by infra/foundation once the registry exists (output: acr_id).
 # You (human): apply infra/foundation, set Key Vault secret values
 ME=$(az ad signed-in-user show --query id -o tsv)
 az role assignment create --assignee-object-id "$ME" --assignee-principal-type User --role "User Access Administrator" --scope /subscriptions/$SUB/resourceGroups/rg-adlc-demo-dev
 az role assignment create --assignee-object-id "$ME" --assignee-principal-type User --role "Storage Blob Data Contributor" \
-  --scope /subscriptions/$SUB/resourceGroups/rg-slipway-tfstate/providers/Microsoft.Storage/storageAccounts/stadlctfstate
+  --scope /subscriptions/$SUB/resourceGroups/rg-adlc-tfstate/providers/Microsoft.Storage/storageAccounts/stadlctfstate
 ```
 
 ## 6. Local shell (for `/slipway:plan` and the human `terraform apply` of `infra/foundation`)

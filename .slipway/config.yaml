@@ -25,7 +25,7 @@ azure:
   key_vault_name: kv-adlc-demo-dev
   identity_name: id-adlc-demo-dev
   state:
-    resource_group: rg-slipway-tfstate
+    resource_group: rg-adlc-tfstate
     storage_account: stadlctfstate
     container: tfstate
 
