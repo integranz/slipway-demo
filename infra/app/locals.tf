@@ -1,4 +1,4 @@
-# Values rendered from .adlc/config.yaml. Change them with /adlc:bootstrap, then re-scaffold.
+# Values rendered from .slipway/config.yaml. Change them with /slipway:bootstrap, then re-scaffold.
 locals {
   project     = "adlc-demo"
   environment = "dev"
@@ -15,6 +15,6 @@ locals {
     environment = local.environment
     managed_by  = "terraform"
     layer       = "app"
-    generator   = "adlc"
+    generator   = "slipway"
   }
 }

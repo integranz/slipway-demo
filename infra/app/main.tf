@@ -1,4 +1,4 @@
-# App layer: one Container Apps environment and one container app per app in .adlc/config.yaml.
+# App layer: one Container Apps environment and one container app per app in .slipway/config.yaml.
 # Container apps are named exactly after the app so they can reach each other as http://<app-name>.
 
 resource "azurerm_container_app_environment" "this" {

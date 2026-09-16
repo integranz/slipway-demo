@@ -1,9 +1,9 @@
-# Written by /adlc:bootstrap on 2026-09-13 from the intake interview. Single source of truth for adlc skills.
+# Written by /slipway:bootstrap on 2026-09-13 from the intake interview. Single source of truth for slipway skills.
 schema_version: 1
 
 project:
   name: adlc-demo
-  description: Demo monorepo (.NET 8 API + React/Vite frontend) delivered by the adlc plugin
+  description: Demo monorepo (.NET 8 API + React/Vite frontend) delivered by the slipway plugin
 
 options:
   cloud: azure
@@ -25,13 +25,13 @@ azure:
   key_vault_name: kv-adlc-demo-dev
   identity_name: id-adlc-demo-dev
   state:
-    resource_group: rg-adlc-tfstate
+    resource_group: rg-slipway-tfstate
     storage_account: stadlctfstate
     container: tfstate
 
 github:
   owner: integranz
-  repo: adlc-demo
+  repo: slipway-demo
   default_branch: main
   cd_environment: dev
 

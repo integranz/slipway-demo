@@ -1,5 +1,4 @@
 # adlc: local-only artefacts (guard hooks also block committing these)
-.adlc/approvals/
 *.tfstate
 *.tfstate.*
 *.tfvars
@@ -22,3 +21,6 @@ obj/
 # .NET IDE artefacts
 *.user
 .vs/
+
+# added by slipway
+.slipway/approvals/

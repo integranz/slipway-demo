@@ -1,11 +1,11 @@
 {
   "extraKnownMarketplaces": {
-    "adlc-marketplace": {
-      "source": { "source": "github", "repo": "integranz/adlc" }
+    "slipway-marketplace": {
+      "source": { "source": "github", "repo": "integranz/slipway" }
     }
   },
   "enabledPlugins": {
-    "adlc@adlc-marketplace": true
+    "slipway@slipway-marketplace": true
   },
   "permissions": {
     "allow": [

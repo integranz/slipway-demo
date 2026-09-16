@@ -1,5 +1,5 @@
 # Foundation layer: everything the app layer and CI need, created once per environment and rarely changed.
-# Applied by a human after /adlc:plan and an approval token. The resource group itself is created by setup-azure.sh.
+# Applied by a human after /slipway:plan and an approval token. The resource group itself is created by setup-azure.sh.
 
 data "azurerm_client_config" "current" {}
 
@@ -7,7 +7,7 @@ data "azurerm_resource_group" "env" {
   name = local.resource_group_name
 }
 
-# CI/CD identity (GitHub Actions via OIDC), created by .adlc/setup-azure.sh
+# CI/CD identity (GitHub Actions via OIDC), created by .slipway/setup-azure.sh
 data "azuread_service_principal" "cicd" {
   display_name = local.cicd_principal_name
 }

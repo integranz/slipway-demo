@@ -1,10 +1,10 @@
 @AGENTS.md
 
 ## Non-negotiables (adlc-demo)
-- Infrastructure changes go through Terraform under the adlc guard hooks. `terraform apply` for `infra/foundation` needs a human approval token; `infra/app` is applied only by the CD workflow. Never `-auto-approve`, never `destroy` from a session.
+- Infrastructure changes go through Terraform under the slipway guard hooks. `terraform apply` for `infra/foundation` needs a human approval token; `infra/app` is applied only by the CD workflow. Never `-auto-approve`, never `destroy` from a session.
 - Never commit secrets, `*.tfvars` (other than `*.example`), state, plan or `.env` files. Secrets are referenced (`var.*`, Key Vault references, `${{ secrets.NAME }}`), never written.
 - Image tags are immutable semver produced by the configured versioning tool (Nerdbank.GitVersioning). Never push or deploy `latest` or a branch name.
-- `.adlc/config.yaml` is the single source of truth for delivery options and apps. Change it with `/adlc:bootstrap`; do not hand-edit generated files to switch options.
-- Verify before asserting: a claim about a build, deployment or ticket needs a command output or URL as evidence (`/adlc:verify`).
+- `.slipway/config.yaml` is the single source of truth for delivery options and apps. Change it with `/slipway:bootstrap`; do not hand-edit generated files to switch options.
+- Verify before asserting: a claim about a build, deployment or ticket needs a command output or URL as evidence (`/slipway:verify`).
 - Do not weaken or bypass hooks, rules or tests to get a green result; report the blocker instead.
-- Work tracking for this repository goes through `/adlc:ticket` only (tracker and project from `.adlc/config.yaml`); personal or org-level Jira skills and commands do not apply here.
+- Work tracking for this repository goes through `/slipway:ticket` only (tracker and project from `.slipway/config.yaml`); personal or org-level Jira skills and commands do not apply here.

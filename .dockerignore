@@ -1,6 +1,6 @@
 .git
 .github
-.adlc
+.slipway
 .claude
 infra
 **/node_modules
