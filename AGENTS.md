@@ -2,7 +2,7 @@
 
 Demo monorepo (.NET 8 API + React/Vite frontend) delivered by the slipway plugin
 
-This repository is delivered by the **slipway** Claude Code plugin (0.12.1). This file is the routing page for humans and agents: what is here, which skill to run, which rules apply. Procedures live in the plugin's skills, not here.
+This repository is delivered by the **slipway** Claude Code plugin (0.12.2). This file is the routing page for humans and agents: what is here, which skill to run, which rules apply. Procedures live in the plugin's skills, not here.
 
 ## Layout
 | App | Path | Kind | Stack | Port | Health |
