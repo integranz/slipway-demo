@@ -15,6 +15,8 @@ options:
   tracker: jira
   secret_store: azure-key-vault
   base_image: dhi
+  cd_trigger: on-ci-success   # <prefix>-<app>-cd starts after a green <prefix>-<app>-ci on main; the dev approval gate stays
+  pr_checks: always-run-gate  # per-app checks can be required on main: a gate job skips untouched apps
 
 azure:
   # subscription_id / tenant_id intentionally omitted (public repo): set ARM_SUBSCRIPTION_ID / ARM_TENANT_ID locally
@@ -46,6 +48,12 @@ jira:
 
 environments: [dev]
 
+# One CI and one CD per app: slipway-demo-<app>-ci / -cd (prefix = repository name)
+pipelines:
+  name_prefix: slipway-demo
+# Repository-level inputs of every app (shared workflow files are always included)
+shared_paths: []
+
 apps:
   - name: api
     path: apps/api
@@ -55,6 +63,7 @@ apps:
     health_path: /health
     test_command: dotnet test apps/api
     image_repository: adlc-demo/api
+    version: "0.2"   # apps/api/version.json starts here (0.1.x was the repository-wide version); libs/dotnet/Demo.Contracts is detected from the ProjectReference
   - name: web
     path: apps/web
     kind: frontend
@@ -64,5 +73,6 @@ apps:
     test_command: npm --prefix apps/web test
     image_repository: adlc-demo/web
     upstreams: [api]
+    version: "0.2"
 
 cursor_mirror: false

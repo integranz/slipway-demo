@@ -1,0 +1,27 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dotnet/Nerdbank.GitVersioning/main/src/NerdBank.GitVersioning/version.schema.json",
+  "version": "0.2",
+  "publicReleaseRefSpec": [
+    "^refs/heads/main$"
+  ],
+  "cloudBuild": {
+    "buildNumber": { "enabled": true },
+    "setVersionVariables": true
+  },
+  "pathFilters": [
+    "/apps/api",
+    "/libs/dotnet/Demo.Contracts",
+    "/.github/workflows/slipway-demo-api-ci.yml",
+    "/.github/workflows/slipway-demo-api-cd.yml",
+    "/.github/workflows/_ci.yml",
+    "/.github/workflows/_cd.yml",
+    "/infra/apps/api",
+    "/.dockerignore"
+  ],
+  "release": {
+    "tagName": "api/v{version}",
+    "branchName": "release/api-v{version}",
+    "versionIncrement": "minor",
+    "firstUnstableTag": "alpha"
+  }
+}

@@ -1,4 +1,5 @@
 using System.Reflection;
+using Demo.Contracts;
 using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,5 +19,4 @@ app.MapGet("/api/greeting", (string? name) => Results.Ok(new { message = $"Hello
 
 app.Run();
 
-public sealed record HealthResponse(string Status, string Version, DateTimeOffset StartedAt);
 public partial class Program { }

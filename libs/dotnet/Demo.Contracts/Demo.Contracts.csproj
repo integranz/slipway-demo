@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Demo.Contracts</RootNamespace>
+    <!-- Shared contracts used by the apps. A change here is a build input of every app that references this project:
+         the slipway scaffold detects the ProjectReference and adds this path to that app's CI triggers and version pathFilters. -->
+  </PropertyGroup>
+
+</Project>
