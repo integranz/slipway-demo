@@ -25,3 +25,6 @@ Guard hooks in the plugin block the things nobody should do from an agent sessio
 
 ## Verifying a deployment
 `/slipway:verify dev <tag>` writes `.slipway/evidence/<tag>.md`; commit it with the ticket closure (`/slipway:ticket done <KEY> --evidence .slipway/evidence/<tag>.md`).
+
+## Protected `main`
+`main` accepts changes only through pull requests (ruleset since 2026-09-17). Required checks, one set per app: `api changes`, `api / test`, `api / image`, `web changes`, `web / test`, `web / image`. An app you did not touch reports its checks as skipped, which counts as passed; an app you touched must build and test green. Force pushes and branch deletion are blocked. Verification evidence and other docs go through pull requests too.
