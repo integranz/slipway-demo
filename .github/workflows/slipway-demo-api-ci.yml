@@ -32,7 +32,8 @@ jobs:
   changes:
     # Always runs on pull requests so the checks below can be required on main: when the PR does not touch
     # this app's inputs, `ci` is skipped, and a conditionally skipped job counts as passed for required status checks.
-    name: changes
+    # Job names carry the app name so the check names stay unique across apps (`api changes`, `api / test`).
+    name: api changes
     runs-on: ubuntu-latest
     outputs:
       run: ${{ steps.gate.outputs.run }}
@@ -64,7 +65,7 @@ jobs:
           PY
 
   ci:
-    name: ci
+    name: api
     needs: changes
     if: needs.changes.outputs.run == 'true'
     uses: ./.github/workflows/_ci.yml
