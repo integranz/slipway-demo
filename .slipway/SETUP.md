@@ -61,7 +61,7 @@ az storage container create -n tfstate --account-name stadlctfstate --auth-mode 
 ```
 az group create -n rg-adlc-demo-dev -l westeurope
 SUB=$(az account show --query id -o tsv); SP=$(az ad sp show --id "$APP_ID" --query id -o tsv)
-# CI/CD service principal: apply infra/app, push images, read/write app-layer state
+# CI/CD service principal: apply infra/apps/<app>, push images, read/write the per-app state files
 az role assignment create --assignee-object-id "$SP" --assignee-principal-type ServicePrincipal --role Contributor \
   --scope /subscriptions/$SUB/resourceGroups/rg-adlc-demo-dev
 az role assignment create --assignee-object-id "$SP" --assignee-principal-type ServicePrincipal --role "Storage Blob Data Contributor" \

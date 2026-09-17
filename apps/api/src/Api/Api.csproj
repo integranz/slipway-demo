@@ -11,4 +11,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\libs\dotnet\Demo.Contracts\Demo.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

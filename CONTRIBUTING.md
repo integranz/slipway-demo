@@ -4,7 +4,7 @@ This repository is delivered by the [slipway](https://github.com/integranz/slipw
 
 ## Branching and releases
 - Trunk-based: `main` is always releasable. Work on a short-lived branch (`feat/<topic>`, `fix/<topic>`, `docs/<topic>`) and open a pull request.
-- Every merge to `main` runs CI, which computes the version with Nerdbank.GitVersioning (`version.json`), pushes immutable images `acradlcdemo.azurecr.io/adlc-demo/{api,web}:<semver>` and creates the `v<semver>` tag. Never hand-write tags or bump versions in commits; change `version.json` in a PR when you need a new minor.
+- Every merge to `main` runs the CI of each app whose inputs changed (`slipway-demo-<app>-ci`), which computes that app's version with Nerdbank.GitVersioning (`apps/<app>/version.json`), pushes immutable images `acradlcdemo.azurecr.io/adlc-demo/{api,web}:<semver>` and creates the `v<semver>` tag. Never hand-write tags or bump versions in commits; change `version.json` in a PR when you need a new minor.
 - Deployments are separate from merges: `/slipway:deploy <tag> dev` dispatches the CD workflow, which plans first and applies only after a human approves the `dev` environment.
 
 ## What you may edit by hand
@@ -19,7 +19,7 @@ This repository is delivered by the [slipway](https://github.com/integranz/slipw
 ```
 dotnet test apps/api
 npm --prefix apps/web ci && npm --prefix apps/web test
-VERSION=$(nbgv get-version -v SemVer2) docker compose up --build   # api :8080, web :8081
+VERSION=$(nbgv get-version -p apps/api -v SemVer2) docker compose up --build   # api :8080, web :8081 (one local label for both images)
 ```
 Guard hooks in the plugin block the things nobody should do from an agent session: `terraform apply` without a human approval token, committing `.env`/`*.tfvars`/state/plan files, and pushing or deploying mutable tags.
 
