@@ -46,7 +46,7 @@ jira:
   issue_type: Story
   subtask_issue_type: Subtask
   # epic_key: DEVOPS-<n>    # optional: parent epic of the story (asked in the interview)
-  # story_key: DEVOPS-<n>   # current story; written by /slipway:ticket story create|set, change it for a new change request
+  story_key: DEVOPS-6       # current story; written by /slipway:ticket story create|set, change it for a new change request
   transitions:
     start: In Progress
     review: In Review
