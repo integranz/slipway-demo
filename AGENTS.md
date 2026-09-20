@@ -2,7 +2,7 @@
 
 Demo monorepo (.NET 8 API + React/Vite frontend) delivered by the slipway plugin
 
-This repository is delivered by the **slipway** Claude Code plugin (0.14.1). This file is the routing page for humans and agents: what is here, which skill to run, which rules apply. Procedures live in the plugin's skills, not here.
+This repository is delivered by the **slipway** Claude Code plugin (0.15.2). This file is the routing page for humans and agents: what is here, which skill to run, which rules apply. Procedures live in the plugin's skills, not here.
 
 ## Layout
 | App | Path | Kind | Stack | Port | Health |
@@ -14,7 +14,8 @@ This repository is delivered by the **slipway** Claude Code plugin (0.14.1). Thi
 | Path | Purpose |
 |---|---|
 | `.slipway/config.yaml` | Delivery options and app inventory (source of truth for every slipway skill) |
-| `.slipway/SETUP.md`, `.slipway/setup-azure.sh` | One-time human prerequisites (checklist + idempotent script, dry run by default): GitHub secrets/variables, environment, Entra app registration with OIDC, state storage, RBAC |
+| `.slipway/SETUP.md`, `.slipway/setup-azure.sh` | Prerequisites: what a human does (logins, Docker Hub token, MCP grant) and what `/slipway:launch` automates behind permission prompts (Entra app + OIDC, state storage, RBAC, secrets, environment, ruleset) |
+| `.slipway/.env.example` | Seed file template for local secrets; the copy `.slipway/.env` is gitignored, only ever sourced, never printed |
 | `.slipway/evidence/<app>/` | Verification records per app and deployed tag |
 | `infra/foundation/` | Shared cloud resources (registry, key vault, identity, logs, Container Apps environment). Applied by a human after `/slipway:plan`; never by an agent alone |
 | `infra/apps/api/` | Compute + image tag of `api` only (own state). Applied only by `slipway-demo-api-cd` behind the environment approval |
@@ -48,12 +49,14 @@ A change to a path listed for one app only builds, versions and deploys that app
 | base_image | `dhi` — Docker Hardened Images (dhi.io |
 | cd_trigger | `on-ci-success` — Automatic: <prefix>-<app>-cd starts when <prefix>-<app>-ci succeeds on the default branch, targeting the CD environment; the environment approval gate still applies |
 | pr_checks | `always-run-gate` — Always start; a first gate job lists the changed files and skips the rest when the app is untouched (a skipped job counts as passed, so the checks can be required on the branch) |
+| cd_approval | `in-session` — Also in the Claude Code session: after the plan summary, the agent approves the pending deployment through the GitHub API under the reviewer's own account, behind a forced permission prompt |
 
 Change an option with `/slipway:bootstrap`; do not edit generated files by hand to switch options.
 
 ## I want to…
 | Goal | Run |
 |---|---|
+| Do everything end to end, resumable (preflight → bootstrap → cloud and GitHub prerequisites → images → foundation → CI/CD → verify → tracking) | `/slipway:launch` |
 | Onboard or change delivery options | `/slipway:bootstrap` |
 | Build and smoke-test one app image locally | `/slipway:dockerize <app path>` |
 | Run every app image together locally | `VERSION=$(nbgv get-version -v SemVer2) docker compose up --build` (see `compose.yaml`) |
@@ -67,7 +70,8 @@ Change an option with `/slipway:bootstrap`; do not edit generated files by hand 
 
 ## Skills
 <available_skills>
-- slipway:bootstrap — intake interview, app classification, scaffold, ticket
+- slipway:launch — the whole delivery in one command; stops only for human decisions and approvals
+- slipway:bootstrap — intake interview, app classification, scaffold, cloud prerequisites, ticket
 - slipway:dockerize — hardened multi-stage Dockerfile for one app, built and health-checked
 - slipway:plan — terraform fmt/validate/plan for one layer; never applies
 - slipway:deploy — trigger and monitor CD for an immutable tag
@@ -83,7 +87,7 @@ Skills come from the plugin (`slipway@slipway-marketplace`, source `integranz/sl
 ## Systems of record and tool policy
 | Need | Use | Not |
 |---|---|---|
-| Tickets | `/slipway:ticket` (tracker: Jira Cloud (Atlassian Rovo MCP Server; Standard plan or higher)) | manual browser updates |
+| Tickets | `/slipway:ticket` (tracker: Jira Cloud (Atlassian Rovo MCP Server; Standard plan or higher); story `DEVOPS-6`) | manual browser updates |
 | Pipeline status, logs, trigger CD | GitHub MCP via `/slipway:deploy` / `/slipway:verify` | `gh` for writes |
 | Cloud inventory for verification | Azure MCP (read-only) or `az … show/list` | Azure MCP for changes |
 | Infrastructure changes | Terraform in `infra/*` under the guard hooks | portal, `az … create`, Azure MCP writes |
