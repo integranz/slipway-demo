@@ -17,6 +17,7 @@ options:
   base_image: dhi
   cd_trigger: on-ci-success   # <prefix>-<app>-cd starts after a green <prefix>-<app>-ci on main; the dev approval gate stays
   pr_checks: always-run-gate  # per-app checks can be required on main: a gate job skips untouched apps
+  cd_approval: in-session     # /slipway:deploy may approve the pending deployment through the GitHub API after you confirm the plan
 
 azure:
   # subscription_id / tenant_id intentionally omitted (public repo): set ARM_SUBSCRIPTION_ID / ARM_TENANT_ID locally
