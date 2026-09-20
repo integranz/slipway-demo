@@ -24,3 +24,6 @@ obj/
 
 # added by slipway
 .slipway/approvals/
+
+# added by slipway
+.slipway/tracking-queue.jsonl

@@ -2,7 +2,7 @@
 
 Demo monorepo (.NET 8 API + React/Vite frontend) delivered by the slipway plugin
 
-This repository is delivered by the **slipway** Claude Code plugin (0.13.2). This file is the routing page for humans and agents: what is here, which skill to run, which rules apply. Procedures live in the plugin's skills, not here.
+This repository is delivered by the **slipway** Claude Code plugin (0.14.0). This file is the routing page for humans and agents: what is here, which skill to run, which rules apply. Procedures live in the plugin's skills, not here.
 
 ## Layout
 | App | Path | Kind | Stack | Port | Health |
@@ -60,7 +60,7 @@ Change an option with `/slipway:bootstrap`; do not edit generated files by hand 
 | See what infrastructure would change | `/slipway:plan <env> --layer foundation\|apps/<app>` |
 | Deploy a released tag of one app | `/slipway:deploy <app> <tag> <env>` |
 | Prove a deployment is correct | `/slipway:verify <app> <env> <tag>` |
-| Track the work | `/slipway:ticket create\|start\|review\|done <key>` |
+| Track the work | `/slipway:ticket show` (story + subtasks), `story create\|set`, `subtask start\|review\|done "<title>"`, `sync` |
 | Understand the repo before changing it | ask for the `explore` sub-agent |
 | Make a scoped change with proof | ask for the `execute` sub-agent with an acceptance command |
 | Check claims independently | ask for the `verify` sub-agent |
@@ -72,7 +72,7 @@ Change an option with `/slipway:bootstrap`; do not edit generated files by hand 
 - slipway:plan — terraform fmt/validate/plan for one layer; never applies
 - slipway:deploy — trigger and monitor CD for an immutable tag
 - slipway:verify — falsifiable post-deploy checks; writes .slipway/evidence/<app>/<tag>.md
-- slipway:ticket — tracker lifecycle with structured descriptions
+- slipway:ticket — epic → story → subtask tracking with read-backs and an offline queue
 - slipway:delivery-knowledge — option reference material (model-invoked)
 </available_skills>
 Skills come from the plugin (`slipway@slipway-marketplace`, source `integranz/slipway`), declared in `.claude/settings.json`. Local sessions install it once with `/plugin install slipway@slipway-marketplace`; cloud sessions install it automatically.
@@ -83,7 +83,7 @@ Skills come from the plugin (`slipway@slipway-marketplace`, source `integranz/sl
 ## Systems of record and tool policy
 | Need | Use | Not |
 |---|---|---|
-| Tickets | `/slipway:ticket` (tracker MCP: Jira Cloud (Atlassian Rovo MCP Server; Standard plan or higher)) | manual browser updates |
+| Tickets | `/slipway:ticket` (tracker: Jira Cloud (Atlassian Rovo MCP Server; Standard plan or higher)) | manual browser updates |
 | Pipeline status, logs, trigger CD | GitHub MCP via `/slipway:deploy` / `/slipway:verify` | `gh` for writes |
 | Cloud inventory for verification | Azure MCP (read-only) or `az … show/list` | Azure MCP for changes |
 | Infrastructure changes | Terraform in `infra/*` under the guard hooks | portal, `az … create`, Azure MCP writes |
