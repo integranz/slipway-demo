@@ -37,10 +37,16 @@ github:
   default_branch: main
   cd_environment: dev
 
+# Tracking: epic (optional) -> one Story per delivery (onboarding, then one per change request) -> one Subtask per unit of work.
+# Skills keep the subtasks current; the story closes itself when every subtask is done. An unreachable Jira never blocks
+# (updates are queued for /slipway:ticket sync); options.tracker: none would disable tracking entirely.
 jira:
   site_url: https://integranz.atlassian.net
   project_key: DEVOPS
   issue_type: Story
+  subtask_issue_type: Subtask
+  # epic_key: DEVOPS-<n>    # optional: parent epic of the story (asked in the interview)
+  # story_key: DEVOPS-<n>   # current story; written by /slipway:ticket story create|set, change it for a new change request
   transitions:
     start: In Progress
     review: In Review
