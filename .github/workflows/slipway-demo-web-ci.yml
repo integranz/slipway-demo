@@ -76,3 +76,19 @@ jobs:
       is_node: true
       tag_prefix: web/v
     secrets: inherit
+
+  result:
+    # Always produces a check named `web ci`, whether the app was built or skipped: reusable-workflow jobs emit
+    # no nested checks when the caller job is skipped, so a branch rule must require this check (and `web changes`).
+    name: web ci
+    needs: [changes, ci]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "ci job result: ${{ needs.ci.result }}"
+          case "${{ needs.ci.result }}" in
+            success) echo "web: built and tested";;
+            skipped) echo "web: untouched by this change, nothing to build";;
+            *) echo "::error::web: CI ${{ needs.ci.result }}"; exit 1;;
+          esac
