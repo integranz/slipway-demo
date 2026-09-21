@@ -50,19 +50,39 @@ jobs:
           if [ "${{ github.event_name }}" != "pull_request" ]; then echo "run=true" >> "$GITHUB_OUTPUT"; exit 0; fi
           gh api "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files" --paginate --jq '.[].filename' > changed.txt
           python3 - <<'PY'
-          import os
+          import os,fnmatch
           paths=[p.strip().rstrip("/") for p in os.environ["APP_PATHS"].splitlines() if p.strip()]
+          inc=[p for p in paths if not p.startswith("!")]; exc=[p[1:] for p in paths if p.startswith("!")]
+          def m(f,p): return fnmatch.fnmatch(f,p) if "*" in p else (f==p or f.startswith(p+"/"))
           changed=[l.strip() for l in open("changed.txt") if l.strip()]
-          hit=[f for f in changed if any(f==p or f.startswith(p+"/") for p in paths)]
+          hit=[f for f in changed if any(m(f,p) for p in inc) and not any(m(f,p) for p in exc)]
           with open(os.environ["GITHUB_OUTPUT"],"a") as out: out.write(f"run={'true' if hit else 'false'}\n")
           with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as s:
               s.write(f"### web: {'changed' if hit else 'untouched'} by this pull request ({len(changed)} changed files, {len(hit)} among this app's inputs)\n")
               for f in hit[:20]: s.write(f"- `{f}`\n")
           PY
 
+  test:
+    # This app's tests, with its own service containers, before the shared stages build the image.
+    name: web test
+    needs: changes
+    if: needs.changes.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - name: install web dependencies
+        run: npm ci --prefix "apps/web" --no-audit --no-fund
+      - name: test web
+        run: npm --prefix apps/web test
+
   ci:
     name: web
-    needs: changes
+    needs: [changes, test]
     if: needs.changes.outputs.run == 'true'
     uses: ./.github/workflows/_ci.yml
     with:
@@ -71,7 +91,6 @@ jobs:
       context: apps/web
       dockerfile: apps/web/Dockerfile
       image_repository: adlc-demo/web
-      test_command: "npm --prefix apps/web test"
       is_dotnet: false
       is_node: true
       tag_prefix: web/v
@@ -81,12 +100,13 @@ jobs:
     # Always produces a check named `web ci`, whether the app was built or skipped: reusable-workflow jobs emit
     # no nested checks when the caller job is skipped, so a branch rule must require this check (and `web changes`).
     name: web ci
-    needs: [changes, ci]
+    needs: [changes, test, ci]
     if: always()
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "ci job result: ${{ needs.ci.result }}"
+          echo "test: ${{ needs.test.result }} | ci: ${{ needs.ci.result }}"
+          case "${{ needs.test.result }}" in failure|cancelled) echo "::error::web: tests ${{ needs.test.result }}"; exit 1;; esac
           case "${{ needs.ci.result }}" in
             success) echo "web: built and tested";;
             skipped) echo "web: untouched by this change, nothing to build";;

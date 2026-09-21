@@ -2,7 +2,7 @@
 
 Demo monorepo (.NET 8 API + React/Vite frontend) delivered by the slipway plugin
 
-This repository is delivered by the **slipway** Claude Code plugin (0.15.2). This file is the routing page for humans and agents: what is here, which skill to run, which rules apply. Procedures live in the plugin's skills, not here.
+This repository is delivered by the **slipway** Claude Code plugin (0.16.0). This file is the routing page for humans and agents: what is here, which skill to run, which rules apply. Procedures live in the plugin's skills, not here.
 
 ## Layout
 | App | Path | Kind | Stack | Port | Health |
@@ -50,6 +50,8 @@ A change to a path listed for one app only builds, versions and deploys that app
 | cd_trigger | `on-ci-success` — Automatic: <prefix>-<app>-cd starts when <prefix>-<app>-ci succeeds on the default branch, targeting the CD environment; the environment approval gate still applies |
 | pr_checks | `always-run-gate` — Always start; a first gate job lists the changed files and skips the rest when the app is untouched (a skipped job counts as passed, so the checks can be required on the branch) |
 | cd_approval | `in-session` — Also in the Claude Code session: after the plan summary, the agent approves the pending deployment through the GitHub API under the reviewer's own account, behind a forced permission prompt |
+| config_store | `env` — Environment variables set by Terraform from apps[].env (simplest; a change creates a new revision) |
+| database | `none` — No: the app receives its connection string from the secret store (you set the value) |
 
 Change an option with `/slipway:bootstrap`; do not edit generated files by hand to switch options.
 
