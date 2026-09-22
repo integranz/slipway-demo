@@ -2,7 +2,7 @@
 
 Demo monorepo (.NET 8 API + React/Vite frontend) delivered by the slipway plugin
 
-This repository is delivered by the **slipway** Claude Code plugin (1.0.0). This file is the routing page for humans and agents: what is here, which skill to run, which rules apply. Procedures live in the plugin's skills, not here.
+This repository is delivered by the **slipway** Claude Code plugin (1.1.1). This file is the routing page for humans and agents: what is here, which skill to run, which rules apply. Procedures live in the plugin's skills, not here.
 
 ## Layout
 | App | Path | Kind | Stack | Port | Health |
@@ -102,4 +102,4 @@ Non-negotiables are in `CLAUDE.md`. Path-scoped rules are in `.claude/rules/` an
 Open **this repo alone** as the workspace root when working on the apps or their delivery. The plugin repo (`integranz/slipway`) owns cross-cutting changes (templates, hooks, skills); propose changes there rather than patching generated files here. Keep one `.mcp.json`/MCP policy per repo: this repo relies on the plugin's servers and declares none of its own.
 
 ## Other agents
-Cursor reads this file natively and loads skills from `.claude/skills/` when present; the slipway skills live in the plugin, so use Claude Code for slipway workflows unless a mirror is enabled (`cursor_mirror` in `.slipway/config.yaml`).
+Cursor reads this file natively (plain-markdown agent instructions). slipway is also a **Cursor plugin** (same repository, `.cursor-plugin/marketplace.json`; install it from a team marketplace import of `integranz/slipway` or with the repository's `npm run install:cursor-local`): the same skills as `/launch`, `/bootstrap`, `/dockerize`, `/plan`, `/deploy`, `/verify` and `/ticket`, the same guard hooks (this repository's `.cursor/hooks.json` routes Cursor's hook events through `.slipway/cursor-hooks.sh` to the installed plugin's adapters; without the plugin they allow everything and say so at session start), read-only explore/verify subagents and the same MCP servers. One difference: a local foundation `terraform apply` in Cursor always needs the human approval token (`bash <plugin-root>/scripts/approve-apply.sh <planfile>` in your own terminal), because Cursor cannot force a permission prompt from a hook. `cursor_mirror` in `.slipway/config.yaml` remains reserved and changes nothing.
